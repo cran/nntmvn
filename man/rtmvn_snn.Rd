@@ -10,11 +10,12 @@ rtmvn_snn(
   cens_lb,
   cens_ub,
   mask_cens,
-  NN,
-  locs,
-  cov_name,
-  cov_parm,
+  m = 30,
   covmat = NULL,
+  locs = NULL,
+  cov_name = NULL,
+  cov_parm = NULL,
+  NN = NULL,
   seed = NULL
 )
 }
@@ -27,7 +28,10 @@ rtmvn_snn(
 
 \item{mask_cens}{mask for censored responses (also locations) of length n}
 
-\item{NN}{n X m matrix for nearest neighbors. i-th row is the nearest neighbor indices of y_i. \code{NN[i, 1]} should be \code{i}}
+\item{m}{positive integer for the number of nearest neighbors used}
+
+\item{covmat}{n-by-n dense covariance matrix, either \code{covmat} or \code{locs},
+\code{cov_name}, and \code{cov_parms} need to be provided}
 
 \item{locs}{location matrix n X d}
 
@@ -35,8 +39,7 @@ rtmvn_snn(
 
 \item{cov_parm}{parameters for the covariance function from the \code{GpGp} package}
 
-\item{covmat}{(optional) n-by-n dense covariance matrix, not needed if \code{locs},
-\code{cov_name}, and \code{cov_parms} are provided}
+\item{NN}{n X m matrix for nearest neighbors. i-th row is the nearest neighbor indices of y_i. \code{NN[i, 1]} should be \code{i}}
 
 \item{seed}{set seed for reproducibility}
 }
@@ -54,7 +57,7 @@ library(nntmvn)
 set.seed(123)
 x <- matrix(seq(from = 0, to = 1, length.out = 51), ncol = 1)
 cov_name <- "matern15_isotropic"
-cov_parm <- c(1.0, 0.1, 0.001) # variance, range, nugget
+cov_parm <- c(1.0, 0.1, 0.001) #' variance, range, nugget
 cov_func <- getFromNamespace(cov_name, "GpGp")
 covmat <- cov_func(cov_parm, x)
 y <- t(chol(covmat)) \%*\% rnorm(length(x))
@@ -64,12 +67,15 @@ y_cens[mask] <- NA
 lb <- rep(-Inf, 100)
 ub <- rep(0.3, 100)
 m <- 10
-NN <- RANN::nn2(x, k = m + 1)[[1]]
-y_samp <- rtmvn_snn(y_cens, lb, ub, mask, NN, x, cov_name, cov_parm)
-
+y_samp_mtd1 <- rtmvn_snn(y_cens, lb, ub, mask, m = m, locs = x, 
+                         cov_name = cov_name, cov_parm = cov_parm, seed = 123)
+y_samp_mtd2 <- rtmvn_snn(y_cens, lb, ub, mask, m = m, covmat = covmat, 
+                         seed = 123)
 plot(x, y_cens, ylim = range(y))
 points(x[mask, ], y[mask], col = "blue")
 plot(x, y_cens, ylim = range(y))
-points(x[mask, ], y_samp[mask], col = "red")
+points(x[mask, ], y_samp_mtd1[mask], col = "red")
+plot(x, y_cens, ylim = range(y))
+points(x[mask, ], y_samp_mtd2[mask], col = "brown")
 
 }

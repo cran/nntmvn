@@ -1,4 +1,11 @@
-8c4cadb846e14d028d6d8900268a6abd *DESCRIPTION
-b462bbf064373d6adcf6f40325d51843 *NAMESPACE
-ec7888dc2a5cceccbaf5750b4a3f6ce8 *R/tmvn_sample.R
-b2b5eb7d3c67b89ff24302a56f28165e *man/rtmvn_snn.Rd
+1108f0ed70a105d82714170fb3cbaaee *DESCRIPTION
+3743d8bc3a53d420b013a661b7897c54 *NAMESPACE
+f16665170e0436642643eb46ce00532f *R/RcppExports.R
+9e479c9cc7022b76fce64a335b246a93 *R/correlation_nn_search.R
+2c377caa7518f84046609cf2c5db7ace *R/nntmvn.R
+855b1100d32d1967219536209b17b410 *R/tmvn_sample.R
+2fa7f485ca88d187b6722e9070305425 *man/corr_nn.Rd
+7381b7e87b90583eef13928d1c4db18a *man/nntmvn.Rd
+fcae2e2682e2988643f3e57459499785 *man/rtmvn_snn.Rd
+38d9cfac9c02a141fcc3b6a297b7f41f *src/RcppExports.cpp
+2eea249dce9c415e9868e1b0115c86f4 *src/find_nn_corr.cpp
